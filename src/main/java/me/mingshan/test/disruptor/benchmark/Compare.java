@@ -16,8 +16,38 @@ import java.util.concurrent.TimeUnit;
 public class Compare {
 
   @Benchmark
-  public void test1() throws InterruptedException {
+  public void testArrayBlockQueue1() throws InterruptedException {
     int capacity = 10000000;
     ArrayBlockQueueTest.test(capacity);
+  }
+
+  @Benchmark
+  public void testDisruptor1() throws InterruptedException {
+    int capacity = 10000000;
+    DisruptorTest.test(capacity);
+  }
+
+  @Benchmark
+  public void testArrayBlockQueue2() throws InterruptedException {
+    int capacity = 50000000;
+    ArrayBlockQueueTest.test(capacity);
+  }
+
+  @Benchmark
+  public void testDisruptor2() throws InterruptedException {
+    int capacity = 50000000;
+    DisruptorTest.test(capacity);
+  }
+
+  @Benchmark
+  public void testArrayBlockQueue4() throws InterruptedException {
+    int capacity = 100000000;
+    ArrayBlockQueueTest.test(capacity);
+  }
+
+  @Benchmark
+  public void testDisruptor4() throws InterruptedException {
+    int capacity = 100000000;
+    DisruptorTest.test(capacity);
   }
 }

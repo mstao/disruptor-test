@@ -16,7 +16,7 @@ public class ArrayBlockQueueTest {
     long startTime = System.currentTimeMillis();
 
     new Thread(() -> {
-      for (int i = 0 ; i < capacity; i++) {
+      for (int i = 1 ; i <= capacity; i++) {
         try {
           queue.put(new Element(i));
         } catch (InterruptedException e) {
@@ -28,8 +28,8 @@ public class ArrayBlockQueueTest {
     }).start();
 
     new Thread(() -> {
-      int i = 0;
-      while ( i < capacity) {
+      int i = 1;
+      while (i < capacity) {
         try {
           queue.take();
         } catch (InterruptedException e) {

@@ -14,6 +14,10 @@ import java.util.concurrent.ThreadFactory;
  * @date 2021/4/15 14:45
  */
 public class DisruptorTest {
+  public static void main(String[] args) throws InterruptedException {
+    test(10000000);
+  }
+
   public static void test(int capacity) throws InterruptedException {
 
     // 生产者的线程工厂
@@ -34,17 +38,25 @@ public class DisruptorTest {
 
     // 处理Event的handler
     EventHandler<Element> handler = new EventHandler<Element>() {
+      int count = 0;
+      long startTime = System.currentTimeMillis();
+
       @Override
       public void onEvent(Element element, long sequence, boolean endOfBatch) {
-        System.out.println("Element: " + element.get());
+        if (count == capacity) {
+          long endTime = System.currentTimeMillis();
+          System.out.println("耗时：" + (endTime - startTime));
+        }
+        count++;
       }
+
     };
 
     // 阻塞策略
     BlockingWaitStrategy strategy = new BlockingWaitStrategy();
 
     // 指定RingBuffer的大小
-    int bufferSize = 16;
+    int bufferSize = 1024 * 1024;
 
     // 创建disruptor，采用单生产者模式
     Disruptor<Element> disruptor = new Disruptor(factory, bufferSize, threadFactory, ProducerType.SINGLE, strategy);
@@ -57,7 +69,7 @@ public class DisruptorTest {
 
     RingBuffer<Element> ringBuffer = disruptor.getRingBuffer();
 
-    for (int l = 0; l < capacity; l++) {
+    for (int l = 0; l <= capacity; l++) {
       // 获取下一个可用位置的下标
       long sequence = ringBuffer.next();
       try {
