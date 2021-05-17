@@ -15,7 +15,7 @@ import java.util.concurrent.ThreadFactory;
  */
 public class DisruptorTest {
   public static void main(String[] args) throws InterruptedException {
-    test(10000000);
+    test(10);
   }
 
   public static void test(int capacity) throws InterruptedException {
@@ -43,6 +43,7 @@ public class DisruptorTest {
 
       @Override
       public void onEvent(Element element, long sequence, boolean endOfBatch) {
+        System.out.println(sequence);
         if (count == capacity) {
           long endTime = System.currentTimeMillis();
           System.out.println("耗时：" + (endTime - startTime));
@@ -56,7 +57,7 @@ public class DisruptorTest {
     BlockingWaitStrategy strategy = new BlockingWaitStrategy();
 
     // 指定RingBuffer的大小
-    int bufferSize = 1024 * 1024;
+    int bufferSize = 1 * 1024;
 
     // 创建disruptor，采用单生产者模式
     Disruptor<Element> disruptor = new Disruptor(factory, bufferSize, threadFactory, ProducerType.SINGLE, strategy);
